@@ -1,8 +1,7 @@
 package io.github.dan7arievlis.libraryapi.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,7 +9,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString(exclude = "books")
+@EqualsAndHashCode
 @Table(name = "author", schema = "public")
 public class Author {
     @Id
@@ -27,6 +31,7 @@ public class Author {
     @Column(name = "nationality", length = 50, nullable = false)
     private String nationality;
 
-    @OneToMany(mappedBy = "author")
-    private final List<Book> books = new ArrayList<>();
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @Transient
+    private List<Book> books = new ArrayList<>();
 }

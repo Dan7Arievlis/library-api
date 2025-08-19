@@ -9,8 +9,13 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString(exclude = "author")
+@EqualsAndHashCode
 @Table(name = "book")
-@Data
 public class Book {
     @Id
     @Column(name = "id")
@@ -34,7 +39,10 @@ public class Book {
     private BigDecimal price;
 //    private Double price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(
+//            cascade = CascadeType.PERSIST,
+            fetch = FetchType.LAZY
+    )
     @JoinColumn(name = "author_id")
     private Author author;
 }
