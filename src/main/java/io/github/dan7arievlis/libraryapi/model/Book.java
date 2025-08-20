@@ -3,9 +3,13 @@ package io.github.dan7arievlis.libraryapi.model;
 import io.github.dan7arievlis.libraryapi.model.enums.BookGenre;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +20,7 @@ import java.util.UUID;
 @ToString(exclude = "author")
 @EqualsAndHashCode
 @Table(name = "book")
+@EntityListeners(AuditingEntityListener.class)
 public class Book {
     @Id
     @Column(name = "id")
@@ -45,4 +50,15 @@ public class Book {
     )
     @JoinColumn(name = "author_id")
     private Author author;
+
+    @CreatedDate
+    @Column(name = "registration_date")
+    private LocalDateTime registrationDate;
+
+    @LastModifiedDate
+    @Column(name = "last_update")
+    private LocalDateTime lastUpdate;
+
+    @Column(name = "user_id")
+    private UUID userId;
 }

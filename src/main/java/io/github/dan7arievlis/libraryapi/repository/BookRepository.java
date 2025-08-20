@@ -61,4 +61,6 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
     @Transactional
     @Query("update Book b set b.publishDate = ?2 where b.title like CONCAT('%', ?1, '%')")
     public void updatePublishDateForTitles(String title, LocalDate newDate);
+
+    public boolean existsByAuthor(Author author);
 }

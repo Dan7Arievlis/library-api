@@ -29,7 +29,8 @@ class BookRepositoryTest {
         book.setPublishDate(LocalDate.of(1999, 9, 29));
         book.setGenre(BookGenre.FICTION);
 
-        Author author = authorRepository.findById(UUID.fromString("c275a276-504b-47a2-b457-07c900fca812")).orElse(null);
+        Author author = authorRepository.findById(UUID.fromString("f8314244-649a-4e75-a163-d6dda26c1b4a")).orElse(null);
+        System.out.println(author);
         book.setAuthor(author);
 
         bookRepository.save(book);
