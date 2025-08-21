@@ -13,5 +13,7 @@ public record ErrorResponse(int status, String message, List<ErrorField> errors)
         return new ErrorResponse(HttpStatus.CONFLICT.value(), message, List.of());
     }
 
-
+    public static ErrorResponse notFound(String message) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), message, List.of());
+    }
 }

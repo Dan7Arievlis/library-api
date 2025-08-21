@@ -5,6 +5,7 @@ import io.github.dan7arievlis.libraryapi.model.Book;
 import io.github.dan7arievlis.libraryapi.model.enums.BookGenre;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,18 +13,19 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
  * @see BookRepositoryTest
  */
 
-public interface BookRepository extends JpaRepository<Book, UUID> {
+public interface BookRepository extends JpaRepository<Book, UUID>, JpaSpecificationExecutor<Book> {
     public List<Book> findByAuthor(Author author);
 
     public List<Book> findByTitleContainingIgnoreCase(String title);
 
-    public Book findByIsbn(String isbn);
+    public Optional<Book> findByIsbn(String isbn);
 
     public List<Book> findByTitleContainingIgnoreCaseAndPriceLessThanEqual(String title, BigDecimal priceIsLessThan);
 

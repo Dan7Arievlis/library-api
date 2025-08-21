@@ -11,6 +11,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,8 +34,8 @@ public class AuthorService {
         repository.save(author);
     }
 
-    public Author getById(UUID authorId) {
-        return repository.findById(authorId).orElse(null);
+    public Optional<Author> getById(UUID authorId) {
+        return repository.findById(authorId);
     }
 
     public void delete(Author author) {
