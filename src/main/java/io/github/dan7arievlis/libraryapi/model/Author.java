@@ -1,5 +1,6 @@
 package io.github.dan7arievlis.libraryapi.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -50,6 +51,7 @@ public class Author {
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
-    @Column(name = "user_id")
-    private UUID userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

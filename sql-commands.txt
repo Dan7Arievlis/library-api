@@ -69,3 +69,10 @@ CREATE TABLE book (
 		'SCIENCE'
 	))
 );
+
+CREATE TABLE tb_user (
+    id UUID NOT NULL PRIMARY KEY,
+    login VARCHAR(20) NOTNULL UNIQUE,
+    password VARCHAR(300) NOT NULL,
+    roles VARCHAR[]
+);

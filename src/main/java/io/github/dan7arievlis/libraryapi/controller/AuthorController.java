@@ -3,11 +3,17 @@ package io.github.dan7arievlis.libraryapi.controller;
 import io.github.dan7arievlis.libraryapi.controller.dto.AuthorRequestDTO;
 import io.github.dan7arievlis.libraryapi.controller.dto.AuthorResponseDTO;
 import io.github.dan7arievlis.libraryapi.controller.dto.mappers.AuthorMapper;
+import io.github.dan7arievlis.libraryapi.model.User;
+import io.github.dan7arievlis.libraryapi.security.SecurityService;
 import io.github.dan7arievlis.libraryapi.service.AuthorService;
+import io.github.dan7arievlis.libraryapi.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -23,6 +29,7 @@ public class AuthorController implements GenericController {
     private final AuthorMapper mapper;
 
     @PostMapping
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> save(@RequestBody @Valid AuthorRequestDTO dto) {
         var author = mapper.RequestToEntity(dto);
         service.save(author);
@@ -31,6 +38,7 @@ public class AuthorController implements GenericController {
     }
 
     @GetMapping({"{id}"})
+    @PreAuthorize("hasAnyRole('MANAGER', 'OPERATOR')")
     public ResponseEntity<AuthorResponseDTO> getDetails(@PathVariable String id) {
         var authorId = UUID.fromString(id);
         return service.getById(authorId)
@@ -39,6 +47,7 @@ public class AuthorController implements GenericController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> delete(@PathVariable String id) {
         var authorId = UUID.fromString(id);
         return service.getById(authorId)
@@ -50,6 +59,7 @@ public class AuthorController implements GenericController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('MANAGER', 'OPERATOR')")
     public ResponseEntity<List<AuthorResponseDTO>> search(
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "nationality", required = false) String nationality) {
@@ -63,6 +73,7 @@ public class AuthorController implements GenericController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> update(
             @PathVariable String id,
             @RequestBody @Valid AuthorRequestDTO authorDto) {

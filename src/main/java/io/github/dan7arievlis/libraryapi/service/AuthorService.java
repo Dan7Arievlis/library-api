@@ -4,6 +4,7 @@ import io.github.dan7arievlis.libraryapi.exceptions.OperationNotAllowedException
 import io.github.dan7arievlis.libraryapi.model.Author;
 import io.github.dan7arievlis.libraryapi.repository.AuthorRepository;
 import io.github.dan7arievlis.libraryapi.repository.BookRepository;
+import io.github.dan7arievlis.libraryapi.security.SecurityService;
 import io.github.dan7arievlis.libraryapi.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -20,9 +21,11 @@ public class AuthorService {
     private final AuthorRepository repository;
     private final AuthorValidator validator;
     private final BookRepository bookRepository;
+    private final SecurityService securityService;
 
     public Author save(Author author) {
         validator.validate(author);
+        author.setUser(securityService.getLoggedUser());
         return repository.save(author);
     }
 
@@ -31,6 +34,7 @@ public class AuthorService {
             throw new IllegalArgumentException("Is necessary to have a saved author in db to update it");
 
         validator.validate(author);
+        author.setUser(securityService.getLoggedUser());
         repository.save(author);
     }
 
@@ -44,18 +48,18 @@ public class AuthorService {
         repository.delete(author);
     }
 
-    public List<Author> search(String name, String nationality) {
-        if (name != null && nationality != null)
-            return repository.findByNameContainingIgnoreCaseAndNationality(name, nationality);
-
-        else if (name != null)
-            return repository.findByNameContainingIgnoreCase(name);
-
-        else if (nationality != null)
-            return repository.findByNationality(nationality);
-
-        return repository.findAll();
-    }
+//    public List<Author> search(String name, String nationality) {
+//        if (name != null && nationality != null)
+//            return repository.findByNameContainingIgnoreCaseAndNationality(name, nationality);
+//
+//        else if (name != null)
+//            return repository.findByNameContainingIgnoreCase(name);
+//
+//        else if (nationality != null)
+//            return repository.findByNationality(nationality);
+//
+//        return repository.findAll();
+//    }
 
     public List<Author> searchByExample(String name, String nationality) {
         var author = new Author();

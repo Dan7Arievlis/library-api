@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -20,12 +21,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping("books")
 @RequiredArgsConstructor
+//@PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
 public class BookController implements GenericController {
 
     private final BookService service;
     private final BookMapper mapper;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
     public ResponseEntity<Void> save(@RequestBody @Valid BookRequestDTO dto) {
         Book book = mapper.RequestToEntity(dto);
         service.save(book);
@@ -34,6 +37,7 @@ public class BookController implements GenericController {
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
     public ResponseEntity<BookResponseDTO> findById(@PathVariable String id) {
         return service.findById(UUID.fromString(id))
                 .map(book -> ResponseEntity.ok(mapper.toResponse(book)))
@@ -41,6 +45,7 @@ public class BookController implements GenericController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
     public ResponseEntity<?> delete(@PathVariable String id) {
         return service.findById(UUID.fromString(id))
                 .map( book -> {
@@ -51,6 +56,7 @@ public class BookController implements GenericController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
     public ResponseEntity<Page<BookResponseDTO>> search(
             @RequestParam(value = "isbn", required = false)
             String isbn,
@@ -72,6 +78,7 @@ public class BookController implements GenericController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'MANAGER')")
     public ResponseEntity<?> update(@PathVariable String id, @RequestBody @Valid BookRequestDTO dto) {
         return service.findById(UUID.fromString(id))
                 .map(book -> {
