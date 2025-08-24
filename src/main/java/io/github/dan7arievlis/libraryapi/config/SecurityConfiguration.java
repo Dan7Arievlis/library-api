@@ -1,6 +1,7 @@
 package io.github.dan7arievlis.libraryapi.config;
 
 import io.github.dan7arievlis.libraryapi.security.CustomUserDetailsService;
+import io.github.dan7arievlis.libraryapi.security.SocialLoginSuccessHandler;
 import io.github.dan7arievlis.libraryapi.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +22,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http, SocialLoginSuccessHandler successHandler) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(conf -> {
@@ -34,10 +37,14 @@ public class SecurityConfiguration {
 //                    authorize.requestMatchers(HttpMethod.GET, "/authors/**").hasAnyRole("ADMIN", "USER");
 //                    authorize.requestMatchers("/authors/**").hasRole("ADMIN");
 //                    authorize.requestMatchers("/books/**").hasAnyRole("USER", "ADMIN");
-
                     authorize.requestMatchers("/login").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/users/**").permitAll();
                     authorize.anyRequest().authenticated();
+                })
+                .oauth2Login(oauth2 -> {
+                    oauth2
+                            .loginPage("/login")
+                        .successHandler(successHandler);
                 })
                 .build();
     }
@@ -47,7 +54,7 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder(10);
     }
 
-    @Bean
+//    @Bean
     public UserDetailsService userDetailsService(UserService userService) {
 //        UserDetails admin = User.builder()
 //                .username("admin")
@@ -64,5 +71,10 @@ public class SecurityConfiguration {
 //        return new InMemoryUserDetailsManager(user, admin);
 
         return new CustomUserDetailsService(userService);
+    }
+
+    @Bean
+    public GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults("");
     }
 }

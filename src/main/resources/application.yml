@@ -8,10 +8,17 @@ spring:
     driver-class-name: org.postgresql.Driver
 #    com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
 #    org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: none
     show-sql: true
     properties:
       hibernate.format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}

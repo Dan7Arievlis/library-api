@@ -28,7 +28,10 @@ public class User {
     @Column(name = "password", length = 300, nullable = false)
     private String password;
 
+    @Column(name = "email", length = 150, nullable = false)
+    private String email;
+
     @Type(ListArrayType.class)
     @Column(name = "roles", columnDefinition = "varchar[]")
-    private final List<String> roles = new ArrayList<>();
+    private List<String> roles = new ArrayList<>();
 }
