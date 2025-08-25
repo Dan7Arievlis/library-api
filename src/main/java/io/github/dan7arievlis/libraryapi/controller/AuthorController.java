@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @RequestMapping("authors")
 @RequiredArgsConstructor
 @Tag(name = "Autores")
+@Slf4j
 public class AuthorController implements GenericController {
 
     private final AuthorService service;
@@ -37,6 +39,7 @@ public class AuthorController implements GenericController {
             @ApiResponse(responseCode = "409", description = "Author já cadastrado.")
     })
     public ResponseEntity<Void> save(@RequestBody @Valid AuthorRequestDTO dto) {
+        log.info("Register new author: {}", dto.name());
         var author = mapper.RequestToEntity(dto);
         service.save(author);
         URI uri = generateHeaderLocation(author.getId());
@@ -66,6 +69,7 @@ public class AuthorController implements GenericController {
             @ApiResponse(responseCode = "400", description = "Author possui livro cadastrado.")
     })
     public ResponseEntity<?> delete(@PathVariable String id) {
+        log.info("Delete author by ID: {}", id);
         var authorId = UUID.fromString(id);
         return service.getById(authorId)
                 .map(author -> {
@@ -84,6 +88,8 @@ public class AuthorController implements GenericController {
     public ResponseEntity<List<AuthorResponseDTO>> search(
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "nationality", required = false) String nationality) {
+        log.info("Search authors by name and nationality");
+
         List<AuthorResponseDTO> search = service
                 .searchByExample(name, nationality)
                 .stream()
