@@ -27,10 +27,7 @@ public class SocialLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
     private static final String DEFAULT_PASSWORD = "password";
 
     @Override
-    public void onAuthenticationSuccess(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication) throws ServletException, IOException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
         OAuth2User oauth2User = token.getPrincipal();
         String email = oauth2User.getAttribute("email");

@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                 })
                 .oauth2Login(oauth2 -> {
                     oauth2
-                            .loginPage("/login")
+                        .loginPage("/login")
                         .successHandler(successHandler);
                 })
                 .build();

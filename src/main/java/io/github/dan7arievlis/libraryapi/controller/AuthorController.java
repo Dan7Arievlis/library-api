@@ -3,17 +3,12 @@ package io.github.dan7arievlis.libraryapi.controller;
 import io.github.dan7arievlis.libraryapi.controller.dto.AuthorRequestDTO;
 import io.github.dan7arievlis.libraryapi.controller.dto.AuthorResponseDTO;
 import io.github.dan7arievlis.libraryapi.controller.dto.mappers.AuthorMapper;
-import io.github.dan7arievlis.libraryapi.model.User;
-import io.github.dan7arievlis.libraryapi.security.SecurityService;
 import io.github.dan7arievlis.libraryapi.service.AuthorService;
-import io.github.dan7arievlis.libraryapi.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
