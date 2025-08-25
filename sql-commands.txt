@@ -77,3 +77,11 @@ CREATE TABLE tb_user (
     email VARCHAR(150) NOT NULL UNIQUE,
     roles VARCHAR[]
 );
+
+CREATE TABLE client(
+	id UUID NOT NULL PRIMARY KEY,
+	client_id VARCHAR(150) NOT NULL UNIQUE,
+	client_secret VARCHAR(400) NOT NULL,
+	redirect_uri VARCHAR(200) NOT NULL,
+	scope VARCHAR(50)
+);
